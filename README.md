@@ -1,108 +1,172 @@
 # product-review-expert
 
-高级产品审查插件，专注发现产品逻辑缺陷、交互问题、流程断点与体验风险，输出结构化审查报告。
+A bilingual Claude Code plugin for structured product reviews. It audits PRDs, page flows, interaction designs, and business rules to surface logic defects, UX risks, missing edge cases, and workflow gaps before release.
 
-## 功能特性
+一个面向 Claude Code 的中英双语产品审查插件，用于审查 PRD、页面方案、业务流程和交互设计，识别逻辑缺陷、体验风险、异常分支遗漏与流程断点，并输出结构化审查报告。
 
-### 技能模块
+## What It Does
 
-| 技能 | 说明 |
+- Reviews product requirements, prototypes, and flow descriptions with a product-quality lens
+- Identifies logic defects, state-transition gaps, conflicting rules, and permission inconsistencies
+- Flags interaction problems such as weak feedback, long action paths, and missing empty or error states
+- Produces structured output with conclusions, prioritized findings, and actionable fixes
+
+## Included Components
+
+### Skills
+
+| Namespaced command | Purpose |
 |------|------|
-| `product-audit` | 综合审查产品需求文档、页面方案、业务流程和交互设计 |
-| `logic-defect-review` | 专项审查产品逻辑缺陷，聚焦流程闭环、状态流转、异常分支 |
-| `interaction-review` | 专项审查交互问题，检查信息架构、操作路径、反馈机制 |
+| `/product-review-expert:product-audit` | Full-spectrum review for PRDs, page plans, business processes, and interaction design |
+| `/product-review-expert:logic-defect-review` | Logic-focused review for flows, state transitions, exception handling, and rule conflicts |
+| `/product-review-expert:interaction-review` | UX-focused review for information architecture, action paths, feedback, and form behavior |
 
 ### Agent
 
-- **senior-product-reviewer**: 高级产品审查专家，综合调用三项技能进行全面审查
+- `/product-review-expert:senior-product-reviewer`
 
-## 安装
+This agent combines the three skills above for a more comprehensive review pass.
+
+## Installation
+
+### From GitHub
 
 ```bash
-# 克隆仓库
-git clone https://github.com/YuSec2021/product-review-expert
-
-# 进入目录
+git clone https://github.com/YuSec2021/product-review-expert.git
 cd product-review-expert
+claude --plugin-dir .
 ```
 
-## 使用方式
+### From a Marketplace
 
-### 直接调用 Skill
+Install `product-review-expert` from the Claude Code plugin discovery flow, then call the plugin with its namespaced commands:
 
-```
-/product-audit
-/logic-defect-review
-/interaction-review
-```
-
-### 使用 Agent 进行全面审查
-
-```
-/senior-product-reviewer
+```text
+/product-review-expert:product-audit
+/product-review-expert:logic-defect-review
+/product-review-expert:interaction-review
+/product-review-expert:senior-product-reviewer
 ```
 
-### 在代码中调用
+## Usage Examples
 
-```json
-{
-  "skills": ["product-audit", "logic-defect-review", "interaction-review"]
-}
+### Example 1: Full PRD audit
+
+```text
+/product-review-expert:product-audit
+以下是一个退款审批系统需求，请重点检查流程闭环、状态流转、角色权限、异常场景和用户反馈是否完整：
+[在这里粘贴 PRD 或流程说明]
 ```
 
-## 输出格式
+### Example 2: Logic-only review
 
-审查报告严格按以下结构输出：
-
-1. **审查结论** - 一句话总结整体质量水平
-2. **关键问题清单** - 按 P0/P1/P2 优先级排列
-   - P0：严重逻辑错误/流程断裂/高风险交互
-   - P1：重要问题，影响核心体验或转化
-   - P2：优化问题，不影响主流程但影响效率与体验
-3. **补充建议** - 结构性优化建议
-4. **最终判断** - 建议立即修改 / 建议优化后推进 / 可进入下一阶段
-
-## 审查维度
-
-### 产品逻辑审查
-- 业务目标清晰性
-- 用户角色完整性
-- 流程闭环成立性
-- 状态流转完整性
-- 异常/边界条件遗漏
-- 规则自洽性
-- 权限角色一致性
-
-### 交互审查
-- 页面层级与信息架构
-- 操作路径长度
-- 操作反馈充分性
-- 风险操作确认机制
-- 空状态/加载态/错误态完整性
-- 表单校验与纠错机制
-
-## 项目结构
-
+```text
+/product-review-expert:logic-defect-review
+请审查这个优惠券领取和核销流程，重点关注重复领取、过期状态、并发提交和角色权限边界：
+[在这里粘贴流程描述]
 ```
+
+### Example 3: Interaction-only review
+
+```text
+/product-review-expert:interaction-review
+请审查这个移动端注册流程的交互设计，关注表单校验、错误提示、加载反馈和误操作风险：
+[在这里粘贴页面方案]
+```
+
+## Output Format
+
+The plugin is designed to return structured review results in this shape:
+
+1. Review conclusion
+2. Key issues list ordered by `P0 / P1 / P2`
+3. Supplemental recommendations
+4. Final go or no-go judgment
+
+Typical issue entries include:
+
+- Issue title
+- Description
+- Scope of impact
+- Risk explanation
+- Suggested fix
+- Priority
+
+## Review Coverage
+
+### Product logic
+
+- Business goal clarity
+- User-role completeness
+- Closed-loop workflow integrity
+- State-transition completeness
+- Preconditions and postconditions
+- Exception and edge-case coverage
+- Rule consistency and priority conflicts
+- Input and output constraints
+- Role and permission consistency
+
+### Interaction quality
+
+- Information architecture and page hierarchy
+- Action-path length and friction
+- Feedback clarity
+- Confirmation for risky actions
+- Empty, loading, and error states
+- Validation and correction guidance
+- Copy clarity and ambiguity
+- Recoverability such as undo, back, and draft saving
+
+## Security And Privacy
+
+- This plugin does not call external APIs or upload user content to third-party services
+- It does not require MCP servers, OAuth, API keys, or extra local dependencies
+- The bundled Stop hook only runs a local script inside the plugin
+- The script writes a timestamped log file under `${CLAUDE_PLUGIN_DATA}` for plugin diagnostics
+- The hook does not edit repository files, send network requests, or collect analytics
+
+## Runtime Notes
+
+- The plugin includes 3 skills, 1 agent, and 1 local hook
+- The Stop hook currently acts as a lightweight normalization and logging entrypoint
+- If you do not want hook-based logging, you can disable the hook by removing the `hooks` entry from `.claude-plugin/plugin.json`
+
+## Repository Structure
+
+```text
 product-review-expert/
 ├── .claude-plugin/
-│   └── plugin.json          # 插件配置
-├── skills/
-│   ├── product-audit/       # 综合审查技能
-│   ├── logic-defect-review/ # 逻辑缺陷审查
-│   └── interaction-review/  # 交互问题审查
+│   └── plugin.json
 ├── agents/
-│   └── senior-product-reviewer.md  # 高级审查 Agent
+│   └── senior-product-reviewer.md
 ├── hooks/
-│   └── hooks.json           # Hook 配置
-└── scripts/
-    └── normalize-output.sh  # 输出规范化脚本
+│   └── hooks.json
+├── scripts/
+│   └── normalize-output.sh
+├── skills/
+│   ├── product-audit/
+│   ├── logic-defect-review/
+│   └── interaction-review/
+├── CHANGELOG.md
+└── LICENSE
 ```
 
-## 相关链接
+## Submission Readiness Notes
 
-- [GitHub 仓库](https://github.com/YuSec2021/product-review-expert)
-- [问题反馈](https://github.com/YuSec2021/product-review-expert)
+This repository includes the materials typically expected before marketplace submission:
+
+- `.claude-plugin/plugin.json` manifest
+- Public source repository
+- README with installation and usage instructions
+- Semver versioning and changelog
+- License
+- Clear disclosure of local hook behavior
+
+## Links
+
+- [GitHub repository](https://github.com/YuSec2021/product-review-expert)
+- [Claude Code plugins docs](https://code.claude.com/docs/en/plugins)
+- [Claude Code plugins reference](https://code.claude.com/docs/en/plugins-reference)
 
 ## License
 

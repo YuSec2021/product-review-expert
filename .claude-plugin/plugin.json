@@ -1,7 +1,7 @@
 {
   "name": "product-review-expert",
-  "version": "1.0.0",
-  "description": "高级产品审查插件，专注发现产品逻辑缺陷、交互问题、流程断点与体验风险，输出结构化审查报告。",
+  "version": "1.0.1",
+  "description": "Bilingual product review plugin for PRD, UX, and workflow audits. Identifies logic defects, interaction risks, and missing edge cases with structured review output.",
   "author": {
     "name": "YuSec2021",
     "email": "gubeiting163@163.com",
@@ -19,6 +19,7 @@
     "product-expert",
     "claude-code-plugin"
   ],
+  "agents": "./agents/",
   "skills": "./skills/",
   "hooks": "./hooks/hooks.json"
 }
