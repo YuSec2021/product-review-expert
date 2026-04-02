@@ -1,6 +1,6 @@
 {
   "name": "product-review-expert",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Bilingual product review plugin for PRD, UX, and workflow audits. Identifies logic defects, interaction risks, and missing edge cases with structured review output.",
   "author": {
     "name": "YuSec2021",
