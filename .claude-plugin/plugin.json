@@ -19,7 +19,6 @@
     "product-expert",
     "claude-code-plugin"
   ],
-  "agents": "./agents/",
   "skills": "./skills/",
   "hooks": "./hooks/hooks.json"
 }
