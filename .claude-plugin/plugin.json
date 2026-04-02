@@ -20,6 +20,5 @@
     "claude-code-plugin"
   ],
   "skills": "./skills/",
-  "agents": "./agents/",
   "hooks": "./hooks/hooks.json"
 }
