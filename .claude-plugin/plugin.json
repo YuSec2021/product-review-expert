@@ -1,0 +1,25 @@
+{
+  "name": "product-review-expert",
+  "version": "1.0.0",
+  "description": "高级产品审查插件，专注发现产品逻辑缺陷、交互问题、流程断点与体验风险，输出结构化审查报告。",
+  "author": {
+    "name": "YuSec2021",
+    "email": "gubeiting163@163.com",
+    "url": "https://github.com/YuSec2021"
+  },
+  "homepage": "https://github.com/YuSec2021/product-review-expert",
+  "repository": "https://github.com/YuSec2021/product-review-expert",
+  "license": "MIT",
+  "keywords": [
+    "product-review",
+    "prd-review",
+    "ux-review",
+    "interaction-review",
+    "logic-audit",
+    "product-expert",
+    "claude-code-plugin"
+  ],
+  "skills": "./skills/",
+  "agents": "./agents/",
+  "hooks": "./hooks/hooks.json"
+}
