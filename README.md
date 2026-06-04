@@ -6,10 +6,11 @@ A bilingual Claude Code plugin for structured product reviews. It audits PRDs, p
 
 ## What It Does
 
-- Reviews product requirements, prototypes, and flow descriptions with a product-quality lens
-- Identifies logic defects, state-transition gaps, conflicting rules, and permission inconsistencies
-- Flags interaction problems such as weak feedback, long action paths, and missing empty or error states
-- Produces structured output with conclusions, prioritized findings, and actionable fixes
+- Clarifies business goals, target users, scope, and constraints **before** reviewing (intake gate), and treats missing definitions as risks
+- Reviews requirements, prototypes, and flows with a senior-PM lens using explicit methodology: user-journey mapping, state-machine modeling, role×permission matrix, and front/back-end gap checks
+- Identifies logic defects, state-transition gaps, conflicting rules, permission inconsistencies, concurrency/idempotency risks, interaction friction, and launch-readiness gaps
+- Grades every finding with a consistent formula — severity = impact × likelihood × reversibility — into P0/P1/P2
+- Produces actionable findings: each issue carries an evidence anchor, quantified impact, concrete fix options, a verification method, and a grading rationale
 
 ## Included Components
 
@@ -17,9 +18,9 @@ A bilingual Claude Code plugin for structured product reviews. It audits PRDs, p
 
 | Namespaced command | Purpose |
 |------|------|
-| `/product-review-expert:product-audit` | Full-spectrum review for PRDs, page plans, business processes, and interaction design |
-| `/product-review-expert:logic-defect-review` | Logic-focused review for flows, state transitions, exception handling, and rule conflicts |
-| `/product-review-expert:interaction-review` | UX-focused review for information architecture, action paths, feedback, and form behavior |
+| `/product-review-expert:product-audit` | Full-spectrum entry: intake → methodology → logic, interaction, and launch-readiness review with senior dimensions (instrumentation, growth, compliance, dependencies) |
+| `/product-review-expert:logic-defect-review` | Logic deep-dive: state machines, closed loops, concurrency/idempotency, role-permission consistency, and rule conflicts |
+| `/product-review-expert:interaction-review` | UX deep-dive: information architecture, action paths, feedback loops, form validation, and misoperation risk |
 
 ### Agent
 
@@ -78,19 +79,22 @@ Install `product-review-expert` from the Claude Code plugin discovery flow, then
 
 The plugin is designed to return structured review results in this shape:
 
-1. Review conclusion
+0. Review scope and assumptions (intake result)
+1. Review conclusion + Go / No-Go
 2. Key issues list ordered by `P0 / P1 / P2`
-3. Supplemental recommendations
-4. Final go or no-go judgment
+3. High-risk drop-off / financial-loss points
+4. Missing information and open questions
+5. Structural recommendations
+6. Launch-readiness judgment
 
-Typical issue entries include:
+Each issue entry includes:
 
 - Issue title
-- Description
-- Scope of impact
-- Risk explanation
-- Suggested fix
-- Priority
+- Evidence anchor (quote the source, or flag "undefined in the doc")
+- Quantified impact (which metric, how many users/orders, worst case)
+- Concrete fix options
+- Verification method (test case, A/B, or metric to watch)
+- Priority + grading rationale (severity = impact × likelihood × reversibility)
 
 ## Review Coverage
 
@@ -116,6 +120,15 @@ Typical issue entries include:
 - Validation and correction guidance
 - Copy clarity and ambiguity
 - Recoverability such as undo, back, and draft saving
+
+### Senior dimensions (scoped to the case)
+
+- Data and observability: instrumentation, funnel monitoring, alerting
+- Growth and business metrics: expected impact on conversion, retention, GMV
+- Compliance and financial risk: privacy, permission audit, reversibility, loss exposure
+- Accessibility and internationalization
+- Cross-team and system dependencies: interfaces, sequencing, external readiness
+- Launch readiness: canary, rollback, degradation, capacity
 
 ## Security And Privacy
 
