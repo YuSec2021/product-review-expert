@@ -1,0 +1,26 @@
+name: Validate Plugins
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'plugins/**'
+      - '.claude-plugin/marketplace.json'
+      - 'scripts/package_plugin.sh'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'plugins/**'
+      - '.claude-plugin/marketplace.json'
+      - 'scripts/package_plugin.sh'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: Validate plugin structure
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate marketplace and plugin
+        run: bash scripts/package_plugin.sh

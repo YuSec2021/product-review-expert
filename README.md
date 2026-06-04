@@ -4,6 +4,8 @@ A bilingual Claude Code plugin for structured product reviews. It audits PRDs, p
 
 一个面向 Claude Code 的中英双语产品审查插件，用于审查 PRD、页面方案、业务流程和交互设计，识别逻辑缺陷、体验风险、异常分支遗漏与流程断点，并输出结构化审查报告。
 
+This repository is packaged in the same style as SprintFoundry: the repository root is a Claude Code marketplace, and the complete plugin source lives under `plugins/product-review-expert`.
+
 ## What It Does
 
 - Clarifies business goals, target users, scope, and constraints **before** reviewing (intake gate), and treats missing definitions as risks
@@ -24,29 +26,45 @@ A bilingual Claude Code plugin for structured product reviews. It audits PRDs, p
 
 ### Agent
 
-- `/product-review-expert:senior-product-reviewer`
+- `product-review-expert:senior-product-reviewer`
 
-This agent combines the three skills above for a more comprehensive review pass.
+The agent combines the three skills above for a more comprehensive review pass. It appears in `/agents` after the plugin is installed. You can also launch Claude Code with it:
+
+```bash
+claude --agent product-review-expert:senior-product-reviewer
+```
 
 ## Installation
 
-### From GitHub
+### From this marketplace repository
 
-```bash
-git clone https://github.com/YuSec2021/product-review-expert.git
-cd product-review-expert
-claude --plugin-dir .
+In Claude Code, add the marketplace and install the plugin:
+
+```text
+/plugin marketplace add YuSec2021/product-review-expert
+/plugin install product-review-expert@product-review-expert
 ```
 
-### From a Marketplace
-
-Install `product-review-expert` from the Claude Code plugin discovery flow, then call the plugin with its namespaced commands:
+Then call the plugin with its namespaced skills:
 
 ```text
 /product-review-expert:product-audit
 /product-review-expert:logic-defect-review
 /product-review-expert:interaction-review
-/product-review-expert:senior-product-reviewer
+```
+
+### Local development
+
+Load the plugin source directly:
+
+```bash
+claude --plugin-dir ./plugins/product-review-expert
+```
+
+After changing plugin files inside an active Claude Code session, run:
+
+```text
+/reload-plugins
 ```
 
 ## Usage Examples
@@ -138,47 +156,58 @@ Each issue entry includes:
 - The script writes a timestamped log file under `${CLAUDE_PLUGIN_DATA}` for plugin diagnostics
 - The hook does not edit repository files, send network requests, or collect analytics
 
-## Runtime Notes
+If you do not want hook-based logging, remove the `hooks` entry from `plugins/product-review-expert/.claude-plugin/plugin.json`.
 
-- The plugin includes 3 skills, 1 agent, and 1 local hook
-- The Stop hook currently acts as a lightweight normalization and logging entrypoint
-- If you do not want hook-based logging, you can disable the hook by removing the `hooks` entry from `.claude-plugin/plugin.json`
+## Release
+
+The complete plugin source is committed under `plugins/product-review-expert`.
+
+Build a distributable plugin archive:
+
+```bash
+bash scripts/package_plugin.sh
+```
+
+Optionally bump the plugin version first:
+
+```bash
+bash scripts/package_plugin.sh --bump patch
+bash scripts/package_plugin.sh --bump minor
+bash scripts/package_plugin.sh --bump major
+```
+
+The script validates plugin structure, keeps `plugins/product-review-expert/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` versions in sync, and writes `product-review-expert.plugin`. The archive is a local build artifact and is intentionally ignored by Git; publish it through release artifacts rather than committing it.
+
+CI workflow `.github/workflows/validate-plugins.yml` validates the marketplace and plugin structure on changes to marketplace, plugin source, or packaging script.
 
 ## Repository Structure
 
 ```text
 product-review-expert/
 ├── .claude-plugin/
-│   └── plugin.json
-├── agents/
-│   └── senior-product-reviewer.md
-├── hooks/
-│   └── hooks.json
+│   └── marketplace.json
+├── .github/
+│   └── workflows/
+│       └── validate-plugins.yml
+├── plugins/
+│   └── product-review-expert/
+│       ├── .claude-plugin/
+│       │   └── plugin.json
+│       ├── agents/
+│       ├── hooks/
+│       ├── scripts/
+│       └── skills/
 ├── scripts/
-│   └── normalize-output.sh
-├── skills/
-│   ├── product-audit/
-│   ├── logic-defect-review/
-│   └── interaction-review/
+│   └── package_plugin.sh
 ├── CHANGELOG.md
-└── LICENSE
+├── LICENSE
+└── README.md
 ```
-
-## Submission Readiness Notes
-
-This repository includes the materials typically expected before marketplace submission:
-
-- `.claude-plugin/plugin.json` manifest
-- Public source repository
-- README with installation and usage instructions
-- Semver versioning and changelog
-- License
-- Clear disclosure of local hook behavior
 
 ## Links
 
 - [GitHub repository](https://github.com/YuSec2021/product-review-expert)
-- [Claude Code plugins docs](https://code.claude.com/docs/en/plugins)
+- [Claude Code plugin marketplaces](https://code.claude.com/docs/en/plugin-marketplaces)
 - [Claude Code plugins reference](https://code.claude.com/docs/en/plugins-reference)
 
 ## License

@@ -1,0 +1,5 @@
+.DS_Store
+*.plugin
+*.skill
+__pycache__/
+tmp/
